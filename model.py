@@ -20,9 +20,9 @@ filter_num = [16, 32, 64, 128]
 
 # classifies an audio shape into a key
 class TapModel(object):
-    def __init__(self, shape=audio_shape):
+    def __init__(self, shape=audio_shape, weights_path=None):
         self.shape = shape
-        self.model = self.generate_model()
+        self.model = self.generate_model() if weights_path is None else keras.models.load_model(weights_path)
 
         self.model.compile(
                 optimizer = Adam(.0002, .5),
