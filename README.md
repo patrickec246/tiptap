@@ -10,9 +10,9 @@ Tiptap uses **pyaudio** to capture a buffered stream of microphone data as raw a
 
 ## Training
 
-    # sudo python train.py
+    # sudo python run.py
    
-   train.py will accept text and begin capturing microphone audio. You can then start typing and text you'd like. train.py will correlate each keystroke to the last 2 seconds of audio captured, and feed this into the training model. Press **Esc** to abort training.
+   Training will accept text and begin capturing microphone audio. You can then start typing and text you'd like. train.py will correlate each keystroke to the last 2 seconds of audio captured, and feed this into the training model. Press **Esc** to abort training.
 
    ```
    (env) (base) local:tiptap local$ sudo python train.py
@@ -26,12 +26,20 @@ Tiptap uses **pyaudio** to capture a buffered stream of microphone data as raw a
 
 ## Testing
 
-    # python test.py [-m model-weights]
+    # python run.py -test
   
-  Once you've trained your model, you can run test.py to start guessing keystrokes. test.py will break to a new line and will begin capturing microphone audio. Type a sentence or a sequence of characters; when you press **Enter**, microphone audio will stop recording, the input audio will be analyzed, and the model will print out a guess of what letters were typed, along with error.
+  Once you've trained your model, you can run with [-test] to start guessing keystrokes. Testing will break to a new line and will begin capturing microphone audio. Type a sentence or a sequence of characters; when you press **Enter**, microphone audio will stop recording, the input audio will be analyzed, and the model will print out a guess of what letters were typed, along with error.
 
   ```
-  (env) (base) local:tiptap local$ sudo python test.py
+  (env) (base) local:tiptap local$ sudo python train.py -test
+  Using plaidml.keras.backend backend.
+
+  Enter some text: Hello
+  Based on audio, I think you typed: ga3ggtlt (accuracy: 0%)
+
+  ---
+
+  (env) (base) local:tiptap local$ sudo python train.py -test
   Using plaidml.keras.backend backend.
 
   Enter some text: madman3

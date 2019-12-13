@@ -29,16 +29,16 @@ class TapModel(object):
         self.output_shape = (batch_num, len(detectable_keys))
         self.input_shape = input_shape
 
-        if weights_path is not None and os.path.exists(weights_path):
-            self.model = keras.models.load_model(weights_path)
-        else:
-            self.model = self.generate_model()
+        self.model = self.generate_model()
 
         self.model.compile(
                 optimizer = Adam(.0002, .5),
                 loss = keras.losses.categorical_crossentropy,
                 metrics=['accuracy']
                 )
+        
+        if weights_path is not None and os.path.exists(weights_path):
+            self.model = keras.models.load_model(weights_path)
 
     def predict_keys(self, spec):
         prediction = self.model.predict(np.expand_dims(self.format_spec(spec), 0))[0]

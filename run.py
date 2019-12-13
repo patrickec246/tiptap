@@ -150,6 +150,9 @@ def train_func():
                 datapoints += 1
                 print('Datapoints generated: {}'.format(datapoints), end='\r')
                 sys.stdout.flush()
+
+                if datapoints % 10 == 0:
+                    model.model.save_weights(weights_path)
         except IndexError as e:
             pass
         except Exception as ee:
@@ -191,6 +194,31 @@ def train():
     thread.start()
     thread.join()
 
+
+def test():
+    input_d = input('\nEnter some text: ')
+
+    spec = np.log1p(np.abs(librosa.stft(audio_buffer, n_fft=fft_window_size)))
+    if np.min(spec) == np.max(spec):
+        return
+    img = np.expand_dims(np.clip((spec - np.min(spec)) / (np.max(spec) - np.min(spec)), 0, 1), 2)
+
+    prediction = ''.join(model.predict_keys(img))
+
+    acc, total = 0, 0
+    for i in range(len(prediction)):
+        total += 1
+        if i < len(input_d) and input_d[i] == prediction[i]:
+            acc += 1
+    acc = round(100 * (acc / total))
+
+    print('Based on audio, I think you typed: {} (accuracy: {}%)'.format(prediction, acc))
+
 if __name__ == '__main__':
-    train()
-    os.system('stty echo')
+    args = sys.argv
+
+    if len(args) >= 2:
+        test()
+    else:
+        train()
+        os.system('stty echo')
